@@ -13,15 +13,17 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String, unique=False, nullable=False)
     hashed_password = db.Column(db.String, nullable=False)
     gender = db.Column(db.String, nullable=False)
-
+    role = db.Column(db.String, nullable=False)
     tasks = db.relationship('Task', backref='user', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, username, email, first_name, last_name, password):
+    def __init__(self, username: str, email: str, first_name: str, last_name: str, password: str, gender: str, role: str):
         self.username = username
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
         self.hashed_password = generate_password_hash(password=password)
+        self.gender = gender
+        self.role = role
 
     def __repr__(self):
         return f"User : {self.username}, ID : {self.id}, Email : {self.email}"

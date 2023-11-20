@@ -1,13 +1,14 @@
 from flask import flash, abort
-from flask import render_template, redirect, url_for, request
+from flask import request
 from flask_login import current_user, login_required
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from werkzeug.security import check_password_hash
+from flask import render_template
 
-from . import app
-from . import db
+from . import db, app
 from .forms import UserForm, LoginForm, TaskForm
-from .model import User, Task
+from .login_manager import *
+from .model import Task
 
 
 # Login/Register
@@ -17,43 +18,57 @@ def register():
         return redirect(url_for('home'))
     form = UserForm()
     if form.validate_on_submit():
-        # Getting Form data
-        username = form.username.data
-        email = form.email.data
         first_name = form.first_name.data
         last_name = form.last_name.data
+        username = form.username.data
+        email = form.email.data
         password = form.password.data
-
-        new_user = User(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
-        db.session.add(new_user)
-        db.session.commit()
+        gender = form.gender.data
+        role = form.role.data
+        new_user = User(username=username, email=email, first_name=first_name, last_name=last_name, password=password,
+                        gender=gender, role=role)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+        except:
+            print("ERROR")
+            return "<h1> Error </h1>"
     return render_template('register.html', form=form)
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    if current_user.is_authenticated:
+        logout_user()
+        return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
+
     form = LoginForm()
+
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
 
-        user = User.query.filter_by(username=username)
+        user = User.query.filter_by(username=username).first()  # Use first() to get the user object
+
         if user is not None and check_password_hash(user.hashed_password, password):
             login_user(user)
+            print(f"User {user.username} logged in")
             flash("Logged in", category='message')
+            return redirect(url_for('home'))
         else:
-            return redirect(url_for('home'), code=401)
+            flash("Invalid username or password", category='error')
+
     return render_template('login.html', form=form)
 
 
-@app.route('/test')
-def test():
-    return "<h1>Hello</h1>"
-
-
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     all_tasks = Task.query.all()

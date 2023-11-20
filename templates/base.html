@@ -20,16 +20,32 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link" href="{{url_for('create_task')}}">Create Task</a>
-      <a class="nav-item nav-link" href="{{url_for('delete_task')}}">Delete Task</a>
+
         {% if current_user.is_authenticated %}
+        <a class="nav-item nav-link" href="#">Create Task</a>
+      <a class="nav-item nav-link" href="#">Delete Task</a>
       <a class="nav-item nav-link" href="{{url_for('logout')}}">Log out</a>
         {% else %}
       <a class="nav-item nav-link" href="{{url_for('login')}}">Login</a>
+      <a class="nav-item nav-link" href="{{url_for('register')}}">Register</a>
         {% endif %}
     </div>
   </div>
 </nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category,message in messages %}
+        {% if category  == 'error' %}
+      <div class="alert alert-danger" role="alert">
+            {{message}}
+      </div>
+        {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
 
 {% block content %}
 
