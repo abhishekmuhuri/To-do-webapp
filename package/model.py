@@ -38,6 +38,7 @@ class Task(db.Model):
     title = db.Column(db.Integer, nullable=False)
     priority = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Integer, nullable=False, default="None")
+    done = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, user_id: int, title: str, priority: str, description: str):
         self.user_id = user_id

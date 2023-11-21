@@ -43,7 +43,7 @@ def register():
 def logout():
     if current_user.is_authenticated:
         logout_user()
-        flash('Logged out!',category='success')
+        flash('Logged out!', category='success')
         return redirect(url_for('login'))
     return redirect(url_for('login'))
 
@@ -76,7 +76,7 @@ def login():
 @login_required
 def home():
     all_tasks = Task.query.all()
-    return render_template('home.html', tasks=all_tasks)
+    return render_template('home.html', all_tasks=all_tasks)
 
 
 @app.route('/create_task', methods=['GET', 'POST'])
@@ -89,12 +89,11 @@ def create_task():
         description = form.description.data
 
         new_task = Task(current_user.id, title, priority, description)
-
         db.session.add(new_task)
         db.session.commit()
-        flash(f"Task {title} created", category='info')
-        return redirect(url_for('home'))
-    return render_template('create_task', current_user=current_user)
+        flash(f"Task {title} created", category='success')
+
+    return render_template('create_task.html', current_user=current_user, form=form)
 
 
 @app.route("/delete_task", methods=['GET', 'POST'])
@@ -111,3 +110,42 @@ def delete_task():
         else:
             abort(400, "Bad Request: Task ID missing")
     return render_template('delete_task.html', current_user=current_user)
+
+
+# Remove Task / Task Done
+@app.route('/remove_task/<int:task_id>', methods=['POST'])
+@login_required
+def remove_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if current_user.id == task.user_id:
+        db.session.delete(task)
+        db.session.commit()
+        flash(f"Task {task.title} removed", category='success')
+
+    return redirect(url_for('home'))
+
+
+@app.route('/mark_done/<int:task_id>', methods=['POST', 'GET'])
+@login_required
+def mark_done(task_id):
+    task = Task.query.get_or_404(task_id)
+    if current_user.id == task.user_id:
+        task.done = True
+        db.session.commit()
+        flash(f"Task {task.title} marked as done", category='success')
+
+    return redirect(url_for('home'))
+
+
+@app.route('/mark_undone/<int:task_id>', methods=['POST', 'GET'])
+@login_required
+def mark_undone(task_id):
+    task = Task.query.get_or_404(task_id)
+    if current_user.id == task.user_id:
+        task.done = False
+        db.session.commit()
+        flash(f"Task {task.title} marked as undone", category='danger')
+
+    return redirect(url_for('home'))
+
+

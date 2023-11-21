@@ -2,20 +2,56 @@
 
 {% block content %}
 
+{% if all_tasks %}
+
+{% for task in all_tasks %}
 <div class="container mt-5">
     <div class="task card">
         <div class="card-body">
-            <h5 class="card-title">Task Title</h5>
-            <p class="card-text">Assigned to: John Doe</p>
-            <div class="btn-group">
-                <button type="button" class="btn btn-success">Done</button>
-                <button type="button" class="btn btn-danger">Remove</button>
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">Assigned to: {{ task.user.first_name }} {{ task.user.last_name }}</p>
+            <p>{{ task.description }}</p>
+            <div class="mb-3">
+                <p class="card-text">
+                    {% if task.priority == 'Low' %}
+                        <span class="badge bg-success">Low Priority</span>
+                    {% elif task.priority == 'Medium' %}
+                        <span class="badge bg-warning">Medium Priority</span>
+                    {% elif task.priority == 'High' %}
+                        <span class="badge bg-danger">High Priority</span>
+                    {% endif %}
+
+                    {% if task.done == True %}
+                        <span class="badge bg-success">Completed</span>
+                    {% else %}
+                        <span class="badge bg-danger">Not Completed</span>
+                    {% endif %}
+                </p>
             </div>
+
+
+            {% if current_user.id == task.user_id %}
+
+            <div class="btn-group">
+                {% if task.done == False %}
+                    <form method="post" action="{{url_for('mark_done',task_id=task.id)}}">
+                        <button type="submit" class="btn btn-success">Done</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{{url_for('mark_undone',task_id=task.id)}}">
+                        <button type="submit" class="btn btn-danger">Undone</button>
+                    </form>
+                {% endif %}
+                <form method="post" action="{{url_for('remove_task',task_id=task.id)}}">
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </div>
+            {% endif %}
         </div>
     </div>
-
-    <!-- Add more tasks here as needed -->
-
 </div>
+{% endfor %}
+
+{% endif %}
 
 {% endblock %}

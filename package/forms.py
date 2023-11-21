@@ -25,6 +25,5 @@ class UserForm(FlaskForm):
 
 class TaskForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired(), Length(min=1, max=64)])
-    priority = StringField("Task Priority: ", validators=[DataRequired(), AnyOf(["Low", "Medium", "High"],
-                                                                                message="Please select priority")])
+    priority = SelectField("Task Priority: ", choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')], validators=[DataRequired()])
     description = StringField("Description", validators=[DataRequired(), Length(0, 256)])
