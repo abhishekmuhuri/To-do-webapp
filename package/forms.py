@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, SubmitField, PasswordField
+from wtforms.fields import StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, AnyOf
 
 
@@ -17,7 +17,7 @@ class UserForm(FlaskForm):
     password = PasswordField("Password:",
                              validators=[DataRequired(), EqualTo('confirm_pass', "Passwords doesn't match"),
                                          Length(min=5, max=64)])
-    gender = StringField('Gender:', validators=[DataRequired(), AnyOf(['Male', 'Female'])])
+    gender = SelectField('Gender', choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired(), AnyOf(['male', 'female'], message='Invalid gender')])
     confirm_pass = PasswordField("Confirm Password:", validators=[DataRequired(), Length(min=5, max=64)])
     role = StringField("Job Role:", validators=[DataRequired()])
     submit = SubmitField("Register")

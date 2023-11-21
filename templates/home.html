@@ -2,10 +2,20 @@
 
 {% block content %}
 
-{% if current_user.is_authenticated %}
-<h1>Hello, you are logged in</h1>
-{% else %}
-<h1>You are not logged in!</h1>
-{% endif %}
+<div class="container mt-5">
+    <div class="task card">
+        <div class="card-body">
+            <h5 class="card-title">Task Title</h5>
+            <p class="card-text">Assigned to: John Doe</p>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">Done</button>
+                <button type="button" class="btn btn-danger">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add more tasks here as needed -->
+
+</div>
 
 {% endblock %}

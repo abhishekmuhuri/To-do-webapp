@@ -1,17 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<form method="post">
-        {{ form.hidden_tag() }}
-        {{form.first_name.label }} {{form.first_name()}}
-        {{form.last_name.label }} {{form.last_name()}}
-        {{form.username.label }} {{form.username()}}
-        {{form.email.label }} {{form.email()}}
-        {{form.password.label }} {{form.password()}}
-        {{form.confirm_pass.label }} {{form.confirm_pass()}}
-        {{form.gender.label }} {{form.gender()}}
-        {{form.role.label }} {{form.role()}}
-        {{form.submit.label }} {{form.submit()}}
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" class="card p-4">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="first_name" class="form-label">{{ form.first_name.label }}</label>
+                    {{ form.first_name(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">{{ form.last_name.label }}</label>
+                    {{ form.last_name(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">{{ form.username.label }}</label>
+                    {{ form.username(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">{{ form.email.label }}</label>
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">{{ form.password.label }}</label>
+                    {{ form.password(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_pass" class="form-label">{{ form.confirm_pass.label }}</label>
+                    {{ form.confirm_pass(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">{{ form.gender.label }}</label>
+                    {{ form.gender(class="form-select") }}
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">{{ form.role.label }}</label>
+                    {{ form.role(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
