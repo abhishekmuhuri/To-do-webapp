@@ -30,6 +30,9 @@ def register():
         try:
             db.session.add(new_user)
             db.session.commit()
+            flash('Registered successfully!', category='success')
+            print(f"User {username} registered successfully!")
+            return redirect(url_for('login'))
         except:
             print("ERROR")
             return "<h1> Error </h1>"
@@ -40,6 +43,7 @@ def register():
 def logout():
     if current_user.is_authenticated:
         logout_user()
+        flash('Logged out!',category='success')
         return redirect(url_for('login'))
     return redirect(url_for('login'))
 
@@ -60,7 +64,7 @@ def login():
         if user is not None and check_password_hash(user.hashed_password, password):
             login_user(user)
             print(f"User {user.username} logged in")
-            flash("Logged in", category='message')
+            flash("Logged in", category='success')
             return redirect(url_for('home'))
         else:
             flash("Invalid username or password", category='error')

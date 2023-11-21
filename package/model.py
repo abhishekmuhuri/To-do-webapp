@@ -11,12 +11,13 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String, unique=True, nullable=False)
     first_name = db.Column(db.String, unique=False, nullable=False)
     last_name = db.Column(db.String, unique=False, nullable=False)
-    hashed_password = db.Column(db.String, nullable=False)
-    gender = db.Column(db.String, nullable=False)
-    role = db.Column(db.String, nullable=False)
+    hashed_password = db.Column(db.String, unique=False, nullable=False)
+    gender = db.Column(db.String, unique=False, nullable=False)
+    role = db.Column(db.String, unique=False, nullable=False)
     tasks = db.relationship('Task', backref='user', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, username: str, email: str, first_name: str, last_name: str, password: str, gender: str, role: str):
+    def __init__(self, username: str, email: str, first_name: str, last_name: str, password: str, gender: str,
+                 role: str):
         self.username = username
         self.email = email
         self.first_name = first_name
