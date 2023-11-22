@@ -1,3 +1,5 @@
+from sqlalchemy.exc import IntegrityError
+
 from flask import flash, abort
 from flask import request
 from flask_login import current_user, login_required
@@ -31,11 +33,14 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             flash('Registered successfully!', category='success')
-            print(f"User {username} registered successfully!")
             return redirect(url_for('login'))
-        except:
-            print("ERROR")
-            return "<h1> Error </h1>"
+        except IntegrityError:
+            db.session.rollback()
+            if User.query.filter_by(email=email).first() is not None:
+                flash("This email is already registered",'error')
+            else:
+                flash("This username is already registered", 'error')
+            return redirect(url_for('register'))
     return render_template('register.html', form=form)
 
 
@@ -63,7 +68,6 @@ def login():
 
         if user is not None and check_password_hash(user.hashed_password, password):
             login_user(user)
-            print(f"User {user.username} logged in")
             flash("Logged in", category='success')
             return redirect(url_for('home'))
         else:
