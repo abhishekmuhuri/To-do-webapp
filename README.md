@@ -13,6 +13,13 @@ Welcome to the To-Do Web Application, a simple yet powerful task management syst
 - **Task Prioritization:** Assign priorities to tasks for better organization. (Low, Medium, High)
 - **Responsive Design:** Enjoy a seamless experience, thanks to the responsive web design and Bootstrap.
 
+## Tech Stack
+- **Backend:** Flask, SQLAlchemy
+- **Authentication:** Flask-Login
+- **Frontend:** HTML, CSS, Bootstrap
+- **Database:** SQLite (can be easily configured for other databases)
+- **ORM:** SQLAlchemy
+
 ## Getting Started
 
 To run the project locally, follow these steps:
