@@ -32,13 +32,11 @@ To run the project locally, follow these steps:
 
 2. Install dependencies:
 ```bash
-  Copy code
   pip install -r requirements.txt
 
 ```
 3. Set up the database:
 ```bash
-Copy code
 
 flask db init
 flask db migrate
@@ -46,7 +44,6 @@ flask db upgrade
 ```
 4. Run the application:
  ```bash
-  Copy code
   flask run
 ```
 
