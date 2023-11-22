@@ -9,7 +9,7 @@ login_manager = LoginManager()
 # create the extension
 
 db = SQLAlchemy()
-sqlalchemy.Column
+
 
 # create the app
 app = Flask(__name__, template_folder='../templates')
